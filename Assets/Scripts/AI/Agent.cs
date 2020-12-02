@@ -6,6 +6,11 @@ public class Agent : MonoBehaviour, IDamageable
 {
 	public AIBehaviourSelector AISelector { get; private set; }
 	public BlackBoard BlackBoard { get; private set; }
+	public WaypointsManager WaypointsManager { get; private set; }
+	public Transform Target { get; set; }
+	public TMPro.TextMeshProUGUI FloatingStateText { get; set; }
+
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -14,10 +19,15 @@ public class Agent : MonoBehaviour, IDamageable
 
 	public void OnInitialize()
 	{
-		AISelector = GetComponent<AIBehaviourSelector>();
 		BlackBoard = GetComponent<BlackBoard>();
+		AISelector = GetComponent<AIBehaviourSelector>();
+		WaypointsManager = FindObjectOfType<WaypointsManager>();
+		FloatingStateText = GetComponentInChildren<TMPro.TextMeshProUGUI>();
+
 		BlackBoard.OnInitialize();
 		AISelector.OnInitialize(BlackBoard);
+
+		Target = WaypointsManager.GetWaypoint();
 	}
 
 	// Update is called once per frame
@@ -29,8 +39,10 @@ public class Agent : MonoBehaviour, IDamageable
 		{
 			TakeDamage(10);
 		}
+
 		var distance = BlackBoard.GetFloatVariableValue(VariableType.Distance);
 		distance.Value = transform.position.magnitude;
+		AISelector.EvaluateBehaviours();
 	}
 
 	public void TakeDamage(float damage)
@@ -40,7 +52,6 @@ public class Agent : MonoBehaviour, IDamageable
 		{
 			res.Value -= damage;
 		}
-		AISelector.EvaluateBehaviours();
 	}
 }
 

@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "FloatValue_" , menuName = "Variables/FloatValue")]
+[CreateAssetMenu(fileName = "FloatValue_", menuName = "Variables/FloatValue")]
 public class FloatValue : BaseScriptableObject
 {
-    public VariableType Type;
+	public VariableType Type;
 
-    [SerializeField] private float value;
-    public float Value { get => value; set => this.value = value; }
+	public override void OnReset()
+	{
+		value = maxValue;
+	}
 
-    [SerializeField] private float minValue = 0;
-    public float MinValue { get { return minValue; } }
+	[SerializeField] private float value;
+	public float Value { get => value; set => this.value = value; }
 
-    [SerializeField] private float maxValue;
-    public float MaxValue { get { return maxValue; } }
+	[SerializeField] private float minValue = 0;
+	public float MinValue { get { return minValue; } }
+
+	[SerializeField] private float maxValue;
+	public float MaxValue { get { return maxValue; } }
 
 }

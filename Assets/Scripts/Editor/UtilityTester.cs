@@ -75,7 +75,7 @@ public class UtilityTester : EditorWindow
 		{
 			foreach(var kv in variables)
 			{
-				if(kv.Value != null) kv.Value.Value = EditorGUILayout.Slider(kv.Value.name, kv.Value.Value, kv.Value.MinValue, kv.Value.MaxValue);
+				kv.Value.Value = EditorGUILayout.Slider(kv.Value.name, kv.Value.Value, kv.Value.MinValue, kv.Value.MaxValue);
 			}
 		}
 		EditorGUI.indentLevel = 0;
