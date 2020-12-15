@@ -5,5 +5,7 @@ using UnityEngine;
 public enum TaskStatus { Success, Failed, Running }
 public abstract class BTBaseNode
 {
-    public abstract TaskStatus Run();
+	public abstract TaskStatus Run();
+
+	public TaskStatus status { get; set; }
 }
