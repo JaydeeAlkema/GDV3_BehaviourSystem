@@ -6,43 +6,48 @@ using UnityEngine.AI;
 
 public class Guard : MonoBehaviour
 {
-	private WaypointsManager waypointsManager;
-	private BTBaseNode tree;
-	private NavMeshAgent agent;
-	private Animator animator;
+	[SerializeField] private LayerMask collisionMask;
+	[SerializeField] private WaypointsManager waypointsManager;
+	[SerializeField] private BTBaseNode tree;
+	[SerializeField] private NavMeshAgent agent;
+	[SerializeField] private Animator animator;
+	[SerializeField] private Transform viewTransform;
+	[SerializeField] private FieldOfView fov;
 
-	public VariableGameObject target;
+	[Header("Variable Floats - GameObjects")]
+	[SerializeField] private VariableFloat walkSpeed;
+	[SerializeField] private VariableFloat stoppingDistance;
+
+	[SerializeField] private VariableGameObject target;
+
 
 	private void Awake()
 	{
 		waypointsManager = FindObjectOfType<WaypointsManager>(); // Not optimal, but it works :)
 		agent = GetComponent<NavMeshAgent>();
 		animator = GetComponentInChildren<Animator>();
+		fov = GetComponent<FieldOfView>();
+
+		agent.speed = walkSpeed.Value;
+		agent.stoppingDistance = stoppingDistance.Value;
+		StartCoroutine(fov.FindTargetsWithDelay(0.2f));
 	}
 
 	private void Start()
 	{
-		target = (VariableGameObject)ScriptableObject.CreateInstance("VariableGameobject");
-
 		Node_Patrol nodePatrol = new Node_Patrol(waypointsManager, agent);
+		Node_TargetVisible nodeTargetVisible = new Node_TargetVisible(fov, target);
+		Invertor nodeTargetVisibleInvertor = new Invertor(nodeTargetVisible);
+		Node_TargetAvailable nodeTargetAvailable = new Node_TargetAvailable(target);
+		Invertor nodeTargetAvailableInvertor = new Invertor(nodeTargetAvailable);
 
+		Sequence sequencePatrol = new Sequence(new List<BTBaseNode> { nodeTargetAvailableInvertor, nodePatrol, nodeTargetVisibleInvertor }, "Patrol Sequence");
+
+		tree = new Selector(new List<BTBaseNode> { sequencePatrol });
 	}
 
 	private void FixedUpdate()
 	{
 		tree?.Run();
 	}
-
-	//private void OnDrawGizmos()
-	//{
-	//    Gizmos.color = Color.yellow;
-	//    Handles.color = Color.yellow;
-	//    Vector3 endPointLeft = viewTransform.position + (Quaternion.Euler(0, -ViewAngleInDegrees.Value, 0) * viewTransform.transform.forward).normalized * SightRange.Value;
-	//    Vector3 endPointRight = viewTransform.position + (Quaternion.Euler(0, ViewAngleInDegrees.Value, 0) * viewTransform.transform.forward).normalized * SightRange.Value;
-
-	//    Handles.DrawWireArc(viewTransform.position, Vector3.up, Quaternion.Euler(0, -ViewAngleInDegrees.Value, 0) * viewTransform.transform.forward, ViewAngleInDegrees.Value * 2, SightRange.Value);
-	//    Gizmos.DrawLine(viewTransform.position, endPointLeft);
-	//    Gizmos.DrawLine(viewTransform.position, endPointRight);
-
-	//}
 }

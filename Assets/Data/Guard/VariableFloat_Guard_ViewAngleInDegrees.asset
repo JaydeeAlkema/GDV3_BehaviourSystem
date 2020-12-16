@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: VariableFloat_Guard_ViewAngleInDegrees
   m_EditorClassIdentifier: 
   autoReset: 1
-  value: 113.29
+  value: 230

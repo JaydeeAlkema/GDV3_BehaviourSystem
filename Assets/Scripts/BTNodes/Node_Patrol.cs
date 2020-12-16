@@ -15,10 +15,6 @@ public class Node_Patrol : BTBaseNode
 
 	float minDistanceToTarget = 1f;
 
-	// How long to wait at each waypoint. Leave this 0 if you want the agent to keep on walking.
-	float waitTime;
-	float waitTimer;
-
 	public Node_Patrol(WaypointsManager _waypointsManager, NavMeshAgent _navAgent)
 	{
 		waypointsManager = _waypointsManager;
