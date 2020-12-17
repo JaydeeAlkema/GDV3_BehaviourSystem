@@ -6,14 +6,14 @@ public class Node_TargetAvailable : BTBaseNode
 {
 	private VariableGameObject target;
 
-	public Node_TargetAvailable(VariableGameObject _target)
+	public Node_TargetAvailable(VariableGameObject target)
 	{
-		target = _target;
+		this.target = target;
 	}
 
 	public override TaskStatus Run()
 	{
-		if(target.Value == null || target.Value.gameObject.activeSelf == false || target.Value.gameObject.activeInHierarchy == false)
+		if(target.Value == null || target.Value.gameObject.activeSelf == false)
 		{
 			Debug.Log("Target is not available!");
 			status = TaskStatus.Failed;

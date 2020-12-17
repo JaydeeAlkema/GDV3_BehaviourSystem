@@ -22,22 +22,22 @@ public class Node_Chase : BTBaseNode
 	private VariableGameObject target;
 	private NavMeshAgent navAgent;
 
-	public Node_Chase(float _minDistanceToChase, float _maxDistanceToChase, float _chaseTime, VariableGameObject _target, NavMeshAgent _navAgent)
+	public Node_Chase(float minDistanceToChase, float maxDistanceToChase, float chaseTime, VariableGameObject target, NavMeshAgent navAgent)
 	{
-		minDistanceToChase = _minDistanceToChase;
-		maxDistanceToChase = _maxDistanceToChase;
-		chaseTime = _chaseTime;
+		this.minDistanceToChase = minDistanceToChase;
+		this.maxDistanceToChase = maxDistanceToChase;
+		this.chaseTime = chaseTime;
 		chaseTimer = chaseTime;
 
-		target = _target;
-		navAgent = _navAgent;
+		this.target = target;
+		this.navAgent = navAgent;
 		navAgent.stoppingDistance = minDistanceToChase;
 	}
 
 	public override TaskStatus Run()
 	{
 		// Check if a path is available to the target
-		if(navAgent.pathStatus == NavMeshPathStatus.PathInvalid || navAgent.pathStatus == NavMeshPathStatus.PathPartial)
+		if(navAgent.pathStatus == NavMeshPathStatus.PathInvalid)
 		{
 			Debug.LogWarning(navAgent.name + " Can't find a path to " + target.name);
 			status = TaskStatus.Failed;

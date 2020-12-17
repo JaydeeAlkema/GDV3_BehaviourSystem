@@ -11,10 +11,10 @@ public class Sequence : BTBaseNode
 	private List<BTBaseNode> children = new List<BTBaseNode>();
 	public List<BTBaseNode> Children { get => children; set => children = value; }
 
-	public Sequence(List<BTBaseNode> _children, string _name)
+	public Sequence(List<BTBaseNode> children, string name)
 	{
-		children = _children;
-		name = _name;
+		this.children = children;
+		this.name = name;
 	}
 
 

@@ -10,15 +10,16 @@ public class Node_Patrol : BTBaseNode
 	/// We grab a transform position from this waypoints manager to simulate a patrolling behaviour;
 	/// </summary>
 	WaypointsManager waypointsManager;
-	Transform target;
 	NavMeshAgent navAgent;
 
-	float minDistanceToTarget = 1f;
+	Transform target;
+	float minDistanceToTarget = 1.15f;
+	int waypointIndex = 0;
 
-	public Node_Patrol(WaypointsManager _waypointsManager, NavMeshAgent _navAgent)
+	public Node_Patrol(WaypointsManager waypointsManager, NavMeshAgent navAgent)
 	{
-		waypointsManager = _waypointsManager;
-		navAgent = _navAgent;
+		this.waypointsManager = waypointsManager;
+		this.navAgent = navAgent;
 	}
 
 	public override TaskStatus Run()
@@ -27,7 +28,7 @@ public class Node_Patrol : BTBaseNode
 		// This is not really a "target", but more of a transform to walk to.
 		if(!target)
 		{
-			target = waypointsManager.GetWaypoint();
+			target = waypointsManager.Waypoints[0];
 			navAgent.SetDestination(target.position);
 		}
 
@@ -42,13 +43,24 @@ public class Node_Patrol : BTBaseNode
 
 		if(distToTarget <= minDistanceToTarget)
 		{
-			Debug.Log(navAgent.name + " reached " + target.name);
-			status = TaskStatus.Success;
-			return status;
+			Debug.Log(navAgent.name + " reached " + target.name + ". Walking to new Waypoint!");
+
+			target = GetNextWaypoint();
+			navAgent.SetDestination(target.position);
 		}
 
 		Debug.Log(navAgent.name + " Patrolling...");
 		status = TaskStatus.Running;
 		return status;
+	}
+
+	Transform GetNextWaypoint()
+	{
+		waypointIndex++;
+
+		if(waypointIndex >= waypointsManager.Waypoints.Count)
+			waypointIndex = 0;
+
+		return waypointsManager.GetWaypoint(waypointIndex);
 	}
 }

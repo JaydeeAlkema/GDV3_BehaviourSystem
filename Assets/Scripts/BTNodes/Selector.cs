@@ -10,9 +10,9 @@ public class Selector : BTBaseNode
 	private List<BTBaseNode> children = new List<BTBaseNode>();
 	public List<BTBaseNode> Children { get => children; set => children = value; }
 
-	public Selector(List<BTBaseNode> _children)
+	public Selector(List<BTBaseNode> children)
 	{
-		children = _children;
+		this.children = children;
 	}
 
 	public override TaskStatus Run()

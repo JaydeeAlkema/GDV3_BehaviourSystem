@@ -28,9 +28,9 @@ public class WaypointsManager : MonoBehaviour
 	/// Returns a random waypointy from the list.
 	/// </summary>
 	/// <returns></returns>
-	public Transform GetWaypoint()
+	public Transform GetWaypoint(int waypointIndex)
 	{
-		return waypoints[Random.Range(0, waypoints.Count)];
+			return waypoints[waypointIndex];
 	}
 
 	private void OnDrawGizmos()

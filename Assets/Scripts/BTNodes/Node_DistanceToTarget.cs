@@ -9,11 +9,11 @@ public class Node_DistanceToTarget : BTBaseNode
 	private Transform target;
 	private NavMeshAgent navAgent;
 
-	public Node_DistanceToTarget(float _minDistanceToTarget, Transform _target, NavMeshAgent _navAgent)
+	public Node_DistanceToTarget(float minDistanceToTarget, Transform target, NavMeshAgent navAgent)
 	{
-		minDistanceToTarget = _minDistanceToTarget;
-		target = _target;
-		navAgent = _navAgent;
+		this.minDistanceToTarget = minDistanceToTarget;
+		this.target = target;
+		this.navAgent = navAgent;
 	}
 
 	public override TaskStatus Run()
@@ -23,6 +23,7 @@ public class Node_DistanceToTarget : BTBaseNode
 			status = TaskStatus.Success;
 			return status;
 		}
+
 		status = TaskStatus.Failed;
 		return status;
 	}

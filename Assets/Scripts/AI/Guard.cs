@@ -6,7 +6,6 @@ using UnityEngine.AI;
 
 public class Guard : MonoBehaviour
 {
-	[SerializeField] private LayerMask collisionMask;
 	[SerializeField] private WaypointsManager waypointsManager;
 	[SerializeField] private BTBaseNode tree;
 	[SerializeField] private NavMeshAgent agent;
@@ -14,9 +13,13 @@ public class Guard : MonoBehaviour
 	[SerializeField] private Transform viewTransform;
 	[SerializeField] private FieldOfView fov;
 
-	[Header("Variable Floats - GameObjects")]
+	[Header("Variable ScriptableObjects")]
+	[SerializeField] private VariableBool weaponAvailable;
+
 	[SerializeField] private VariableFloat walkSpeed;
 	[SerializeField] private VariableFloat stoppingDistance;
+	[SerializeField] private VariableFloat attackRange;
+	[SerializeField] private VariableFloat viewDistance;
 
 	[SerializeField] private VariableGameObject target;
 
@@ -35,15 +38,28 @@ public class Guard : MonoBehaviour
 
 	private void Start()
 	{
-		Node_Patrol nodePatrol = new Node_Patrol(waypointsManager, agent);
-		Node_TargetVisible nodeTargetVisible = new Node_TargetVisible(fov, target);
-		Invertor nodeTargetVisibleInvertor = new Invertor(nodeTargetVisible);
-		Node_TargetAvailable nodeTargetAvailable = new Node_TargetAvailable(target);
-		Invertor nodeTargetAvailableInvertor = new Invertor(nodeTargetAvailable);
+		// Patrol Behaviour
+		Node_Patrol node_Patrol = new Node_Patrol(waypointsManager, agent);
+		Node_TargetVisible node_TargetVisible = new Node_TargetVisible(target, fov);
+		Invertor node_TargetVisibleInvertor = new Invertor(node_TargetVisible);
+		Node_TargetAvailable node_TargetAvailable = new Node_TargetAvailable(target);
+		Invertor node_TargetAvailableInvertor = new Invertor(node_TargetAvailable);
 
-		Sequence sequencePatrol = new Sequence(new List<BTBaseNode> { nodeTargetAvailableInvertor, nodePatrol, nodeTargetVisibleInvertor }, "Patrol Sequence");
+		Sequence sequencePatrol = new Sequence(new List<BTBaseNode> { node_TargetAvailableInvertor, node_Patrol, node_TargetVisibleInvertor }, "Patrol Sequence");
 
-		tree = new Selector(new List<BTBaseNode> { sequencePatrol });
+		// Chase & Attack Behaviour
+		Node_Bool node_WeaponAvailable = new Node_Bool(weaponAvailable);
+		Node_MoveToTransform node_MoveToTransform = new Node_MoveToTransform(GameObject.FindGameObjectWithTag("Weapon").transform, agent, stoppingDistance.Value); // Again... Not optimal, but it works!
+		Node_AcquireWeapon node_AcquireWeapon = new Node_AcquireWeapon(GameObject.FindGameObjectWithTag("Weapon").transform, agent, 1.15f, weaponAvailable);
+		Node_Chase node_Chase = new Node_Chase(1, 10, 5f, target, agent);
+		Node_Attack node_Attack = new Node_Attack(attackRange.Value, agent, target);
+
+		Sequence sequence_AcquireWeapon = new Sequence(new List<BTBaseNode> { node_MoveToTransform, node_AcquireWeapon }, "Sequence: Acquire Weapon");
+		Selector selector_HasWeapon = new Selector(new List<BTBaseNode> { node_WeaponAvailable, sequence_AcquireWeapon });
+		Sequence sequence_Chase = new Sequence(new List<BTBaseNode> { node_TargetAvailable, selector_HasWeapon, node_Chase, node_Attack }, "Sequence: Chasing");
+
+
+		tree = new Selector(new List<BTBaseNode> { sequence_Chase, sequencePatrol });
 	}
 
 	private void FixedUpdate()

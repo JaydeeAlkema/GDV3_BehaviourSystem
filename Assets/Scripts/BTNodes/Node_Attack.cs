@@ -5,17 +5,8 @@ using UnityEngine.AI;
 
 public class Node_Attack : BTBaseNode
 {
-	/// <summary>
-	/// The Distance a target has to be in.
-	/// </summary>
 	private float attackDistance = default;
-	/// <summary>
-	/// NavMeshAgent Reference.
-	/// </summary>
 	private NavMeshAgent navAgent = default;
-	/// <summary>
-	/// VariableGameobject Reference.
-	/// </summary>
 	private VariableGameObject target;
 
 	public Node_Attack(float _attackDistance, NavMeshAgent _navAgent, VariableGameObject _target)
@@ -64,6 +55,7 @@ public class Node_Attack : BTBaseNode
 		Debug.LogError(navAgent.name + " attacked " + closestTarget.name);
 		target.Value = null;
 		closestTarget.GetComponent<IDamageable>().TakeDamage(navAgent.gameObject, 1);
+
 		status = TaskStatus.Success;
 		return status;
 	}

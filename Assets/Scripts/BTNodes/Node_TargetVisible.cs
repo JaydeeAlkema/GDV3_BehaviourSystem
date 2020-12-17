@@ -8,22 +8,25 @@ public class Node_TargetVisible : BTBaseNode
 	private VariableGameObject target;
 	private FieldOfView fov;
 
-	public Node_TargetVisible(FieldOfView _fov, VariableGameObject _target)
+	public Node_TargetVisible(VariableGameObject target, FieldOfView fov)
 	{
-		fov = _fov;
-		target = _target;
+		this.target = target;
+		this.fov = fov;
 	}
 
 	public override TaskStatus Run()
 	{
 		if(fov.VisibleTargets.Count <= 0)
 		{
+			Debug.Log("No Targets in sight!");
+			target.Value = null;
 			status = TaskStatus.Failed;
 			return status;
 		}
 		else
 		{
-			target.Value = fov.VisibleTargets[0].gameObject;
+			target.Value = fov.VisibleTargets[0].gameObject; 
+			Debug.Log("Target in sight! Targeting " + target.Value.name);
 			status = TaskStatus.Success;
 			return status;
 		}

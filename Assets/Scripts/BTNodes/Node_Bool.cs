@@ -6,9 +6,14 @@ public class Node_Bool : BTBaseNode
 {
 	private VariableBool value;
 
-	public Node_Bool(VariableBool _value)
+	public Node_Bool(VariableBool value)
 	{
-		value = _value;
+		this.value = value;
+	}
+
+	public Node_Bool(bool value)
+	{
+		this.value.Value = value;
 	}
 
 	public override TaskStatus Run()
@@ -20,6 +25,7 @@ public class Node_Bool : BTBaseNode
 		}
 		else
 		{
+			Debug.Log(value.name + " Check Failed!");
 			status = TaskStatus.Failed;
 			return status;
 		}

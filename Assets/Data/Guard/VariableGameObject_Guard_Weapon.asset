@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a1ab4d9702c6cb4d9a82b3a9dcbced0, type: 3}
-  m_Name: VariableFloat_Guard_ViewAngleInDegrees
+  m_Script: {fileID: 11500000, guid: ef0585a4f4ba86147814559fc8191bbd, type: 3}
+  m_Name: VariableGameObject_Guard_Weapon
   m_EditorClassIdentifier: 
   autoReset: 1
-  value: 220
+  value: {fileID: 0}
