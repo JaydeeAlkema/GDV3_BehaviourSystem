@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+// Source: https://github.com/MrSliddes/GameDevAI/blob/main/BehaviourTreeExample/Assets/Scripts/Tymon%20Scripts/TAB%20Behavior%20Tree/Selector.cs
+
 /// <summary>
 /// Displays the current node that is running
 /// </summary>
