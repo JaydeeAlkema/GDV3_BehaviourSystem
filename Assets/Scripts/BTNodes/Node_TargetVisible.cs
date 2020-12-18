@@ -5,11 +5,13 @@ using UnityEngine.AI;
 
 public class Node_TargetVisible : BTBaseNode
 {
+	private Transform transform;
 	private VariableGameObject target;
 	private FieldOfView fov;
 
-	public Node_TargetVisible(VariableGameObject target, FieldOfView fov)
+	public Node_TargetVisible(Transform transform, VariableGameObject target, FieldOfView fov)
 	{
+		this.transform = transform;
 		this.target = target;
 		this.fov = fov;
 	}
@@ -25,7 +27,7 @@ public class Node_TargetVisible : BTBaseNode
 		}
 		else
 		{
-			target.Value = fov.VisibleTargets[0].gameObject; 
+			target.Value = fov.GetNearestTarget(transform).gameObject;
 			Debug.Log("Target in sight! Targeting " + target.Value.name);
 			status = TaskStatus.Success;
 			return status;

@@ -76,7 +76,7 @@ public class Node_Chase : BTBaseNode
 		}
 		else
 		{
-			Debug.Log(navAgent.name + " Chasing target " + navAgent.name);
+			Debug.Log(navAgent.name + " Chasing target " + target.name);
 			status = TaskStatus.Running;
 			return status;
 		}

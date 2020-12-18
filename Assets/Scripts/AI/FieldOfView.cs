@@ -28,6 +28,23 @@ public class FieldOfView : MonoBehaviour
 		}
 	}
 
+	public Transform GetNearestTarget(Transform origin)
+	{
+		if(visibleTargets.Count == 0) return null;
+
+		float nearestDistToTarget = Vector3.Distance(origin.position, visibleTargets[0].position);
+		Transform nearestTarget = visibleTargets[0];
+		foreach(Transform target in visibleTargets)
+		{
+			if(Vector3.Distance(transform.position, target.position) < nearestDistToTarget)
+			{
+				nearestDistToTarget = Vector3.Distance(transform.position, target.position);
+				nearestTarget = target;
+			}
+		}
+		return nearestTarget;
+	}
+
 	void FindVisibleTargets()
 	{
 		visibleTargets.Clear();

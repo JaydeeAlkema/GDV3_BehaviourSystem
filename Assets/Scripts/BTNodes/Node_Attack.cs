@@ -45,14 +45,17 @@ public class Node_Attack : BTBaseNode
 		{
 			if(Vector3.Distance(navAgent.transform.position, t.position) < dist)
 			{
-				closestTarget = t;
-				dist = Vector3.Distance(navAgent.transform.position, t.position);
+				if(t.GetComponent<Player>() != null)
+				{
+					closestTarget = t;
+					dist = Vector3.Distance(navAgent.transform.position, t.position);
+				}
 			}
 		}
 
 		// Closest target found.
 		// Continue with expected behaviour.
-		Debug.LogError(navAgent.name + " attacked " + closestTarget.name);
+		Debug.Log(navAgent.name + " attacked " + closestTarget.name);
 		target.Value = null;
 		closestTarget.GetComponent<IDamageable>().TakeDamage(navAgent.gameObject, 1);
 

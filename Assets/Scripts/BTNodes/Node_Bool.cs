@@ -25,7 +25,7 @@ public class Node_Bool : BTBaseNode
 		}
 		else
 		{
-			Debug.Log(value.name + " Check Failed!");
+			Debug.Log(value.GetType().Name + " Check Failed!");
 			status = TaskStatus.Failed;
 			return status;
 		}

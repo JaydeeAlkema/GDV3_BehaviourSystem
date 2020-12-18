@@ -39,11 +39,13 @@ public class Guard : MonoBehaviour
 	{
 
 		target = (VariableGameObject)ScriptableObject.CreateInstance("VariableGameObject");
-		target.Value = GameObject.FindGameObjectWithTag("Player");
+		weaponAvailable = (VariableBool)ScriptableObject.CreateInstance("VariableBool");
+
+		weaponAvailable.Value = false;
 
 		// Patrol Behaviour
 		Node_Patrol node_Patrol = new Node_Patrol(waypointsManager, agent);
-		Node_TargetVisible node_TargetVisible = new Node_TargetVisible(target, fov);
+		Node_TargetVisible node_TargetVisible = new Node_TargetVisible(agent.transform, target, fov);
 		Invertor node_TargetVisibleInvertor = new Invertor(node_TargetVisible);
 		Node_TargetAvailable node_TargetAvailable = new Node_TargetAvailable(target);
 		Invertor node_TargetAvailableInvertor = new Invertor(node_TargetAvailable);
@@ -52,8 +54,8 @@ public class Guard : MonoBehaviour
 
 		// Chase & Attack Behaviour
 		Node_Bool node_WeaponAvailable = new Node_Bool(weaponAvailable);
-		Node_MoveToTransform node_MoveToTransform = new Node_MoveToTransform(GameObject.FindGameObjectWithTag("Weapon").transform, agent, stoppingDistance.Value); // Again... Not optimal, but it works!
-		Node_AcquireWeapon node_AcquireWeapon = new Node_AcquireWeapon(GameObject.FindGameObjectWithTag("Weapon").transform, agent, stoppingDistance.Value, weaponAvailable);
+		Node_MoveToTransform node_MoveToTransform = new Node_MoveToTransform(GameObject.FindGameObjectWithTag("Weapon").transform, agent, 2f); // Again... Not optimal, but it works!
+		Node_AcquireWeapon node_AcquireWeapon = new Node_AcquireWeapon(GameObject.FindGameObjectWithTag("Weapon").transform, agent, 2f, weaponAvailable);
 		Node_Chase node_Chase = new Node_Chase(1, 10, 5f, target, agent);
 		Node_Attack node_Attack = new Node_Attack(attackRange.Value, agent, target);
 
@@ -66,7 +68,7 @@ public class Guard : MonoBehaviour
 
 		if(Application.isEditor)
 		{
-			gameObject.AddComponent<ShowNodeTreeStatus>().AddConstructor(transform, tree);
+			//gameObject.AddComponent<ShowNodeTreeStatus>().AddConstructor(transform, tree);
 		}
 	}
 

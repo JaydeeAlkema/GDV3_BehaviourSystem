@@ -16,7 +16,7 @@ public class Invertor : BTBaseNode
 		switch(child.Run())
 		{
 			case TaskStatus.Success:
-				status = TaskStatus.Running;
+				status = TaskStatus.Failed;
 				break;
 
 			case TaskStatus.Failed:
@@ -24,7 +24,7 @@ public class Invertor : BTBaseNode
 				break;
 
 			case TaskStatus.Running:
-				status = TaskStatus.Failed;
+				status = TaskStatus.Running;
 				break;
 
 			default:

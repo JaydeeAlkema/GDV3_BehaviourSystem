@@ -21,6 +21,7 @@ public class Node_MoveToTransform : BTBaseNode
 		navAgent.SetDestination(targetTransform.position);
 		if(Vector3.Distance(navAgent.transform.position, targetTransform.position) <= stoppingDistance)
 		{
+			Debug.Log("Reached Target " + targetTransform.name);
 			status = TaskStatus.Success;
 			return status;
 		}

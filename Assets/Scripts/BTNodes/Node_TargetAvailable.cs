@@ -17,11 +17,13 @@ public class Node_TargetAvailable : BTBaseNode
 		{
 			Debug.Log("Target is not available!");
 			status = TaskStatus.Failed;
-			return status;
+		}
+		else
+		{
+			Debug.Log("Target is available!");
+			status = TaskStatus.Success;
 		}
 
-		Debug.Log("Target is available!");
-		status = TaskStatus.Success;
 		return status;
 	}
 }
