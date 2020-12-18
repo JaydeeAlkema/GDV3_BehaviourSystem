@@ -12,6 +12,7 @@ public class Guard : MonoBehaviour
 	[SerializeField] private Animator animator;
 	[SerializeField] private Transform viewTransform;
 	[SerializeField] private FieldOfView fov;
+	[SerializeField] private GameObject smokeParticles;
 
 	[Header("Variable ScriptableObjects")]
 	[SerializeField] private VariableBool weaponAvailable;
@@ -23,6 +24,8 @@ public class Guard : MonoBehaviour
 
 	[SerializeField] private VariableGameObject target;
 
+	public VariableBool active;
+	public bool isSmoked = false;
 
 	private void Awake()
 	{
@@ -47,21 +50,21 @@ public class Guard : MonoBehaviour
 		Node_Patrol node_Patrol = new Node_Patrol(waypointsManager, agent);
 		Node_TargetVisible node_TargetVisible = new Node_TargetVisible(agent.transform, target, fov);
 		Invertor node_TargetVisibleInvertor = new Invertor(node_TargetVisible);
-		Node_TargetAvailable node_TargetAvailable = new Node_TargetAvailable(target);
+		Node_TargetAvailable node_TargetAvailable = new Node_TargetAvailable(target, active);
 		Invertor node_TargetAvailableInvertor = new Invertor(node_TargetAvailable);
 
-		Sequence sequencePatrol = new Sequence(new List<BTBaseNode> { node_TargetAvailableInvertor, node_Patrol, node_TargetVisibleInvertor }, "Patrol Sequence");
+		Sequence sequencePatrol = new Sequence(new List<BTBaseNode> { node_TargetAvailableInvertor, node_Patrol, node_TargetVisibleInvertor }, "Guard Patrol Sequence");
 
 		// Chase & Attack Behaviour
 		Node_Bool node_WeaponAvailable = new Node_Bool(weaponAvailable);
 		Node_MoveToTransform node_MoveToTransform = new Node_MoveToTransform(GameObject.FindGameObjectWithTag("Weapon").transform, agent, 2f); // Again... Not optimal, but it works!
 		Node_AcquireWeapon node_AcquireWeapon = new Node_AcquireWeapon(GameObject.FindGameObjectWithTag("Weapon").transform, agent, 2f, weaponAvailable);
-		Node_Chase node_Chase = new Node_Chase(1, 5f, 5f, target, agent);
+		Node_Chase node_Chase = new Node_Chase(1, 5f, 5f, target, agent, true);
 		Node_Attack node_Attack = new Node_Attack(attackRange.Value, agent, target);
 
-		Sequence sequence_AcquireWeapon = new Sequence(new List<BTBaseNode> { node_MoveToTransform, node_AcquireWeapon }, "Sequence: Acquire Weapon");
+		Sequence sequence_AcquireWeapon = new Sequence(new List<BTBaseNode> { node_MoveToTransform, node_AcquireWeapon }, "Guard Sequence: Acquire Weapon");
 		Selector selector_HasWeapon = new Selector(new List<BTBaseNode> { node_WeaponAvailable, sequence_AcquireWeapon });
-		Sequence sequence_Chase = new Sequence(new List<BTBaseNode> { node_TargetAvailable, selector_HasWeapon, node_Chase, node_Attack }, "Sequence: Chasing");
+		Sequence sequence_Chase = new Sequence(new List<BTBaseNode> { node_TargetAvailable, selector_HasWeapon, node_Chase, node_Attack }, "Guard Sequence: Chasing");
 
 
 		tree = new Selector(new List<BTBaseNode> { sequence_Chase, sequencePatrol });
@@ -74,6 +77,24 @@ public class Guard : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		if(isSmoked) return;
 		tree?.Run();
+	}
+
+	public void TriggerSmoke()
+	{
+		StartCoroutine(SmokeCoroutine());
+	}
+
+	private IEnumerator SmokeCoroutine()
+	{
+		Instantiate(smokeParticles, transform.position, Quaternion.identity);
+		target.Value = null;
+		isSmoked = true;
+		agent.isStopped = true;
+		yield return new WaitForSeconds(3f);
+		isSmoked = false;
+		agent.isStopped = false;
+		yield break;
 	}
 }

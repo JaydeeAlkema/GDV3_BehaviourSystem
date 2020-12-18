@@ -479,9 +479,9 @@ GameObject:
   - component: {fileID: 539429226}
   - component: {fileID: 539429223}
   - component: {fileID: 539429225}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: AI_Guard
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -503,12 +503,16 @@ MonoBehaviour:
   animator: {fileID: 1261249399}
   viewTransform: {fileID: 925384070}
   fov: {fileID: 539429226}
+  smokeParticles: {fileID: 8282531212841674944, guid: ff3485c1f11f03e4892254dcc37037c4,
+    type: 3}
   weaponAvailable: {fileID: 0}
   walkSpeed: {fileID: 11400000, guid: 8439a8917c2a36f42b9ecd44321ee4e6, type: 2}
   stoppingDistance: {fileID: 11400000, guid: 722d74e7e681ad544bb99468d173721b, type: 2}
   attackRange: {fileID: 11400000, guid: 031d171b9a8ec6e41bd2ff67dc78c857, type: 2}
   viewDistance: {fileID: 11400000, guid: bd36500c7c2113646a09b6272e172f3f, type: 2}
   target: {fileID: 0}
+  active: {fileID: 11400000, guid: 5f703bf497fb8984c8f78a48f559d026, type: 2}
+  isSmoked: 0
 --- !u!195 &539429223
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1369,6 +1373,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1666334633}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1674688688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1674688689}
+  m_Layer: 0
+  m_Name: Cover
+  m_TagString: Cover
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1674688689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1674688688}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.921121, y: 0.45802832, z: -0.053674772}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1696898267
 GameObject:
   m_ObjectHideFlags: 0
@@ -1720,6 +1754,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 794f0ee09c67de7498fb2d6bcc43074d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyLayermask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &1868206819
 GameObject:
   m_ObjectHideFlags: 0

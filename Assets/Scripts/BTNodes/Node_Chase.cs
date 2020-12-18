@@ -22,7 +22,9 @@ public class Node_Chase : BTBaseNode
 	private VariableGameObject target;
 	private NavMeshAgent navAgent;
 
-	public Node_Chase(float minDistanceToChase, float maxDistanceToChase, float chaseTime, VariableGameObject target, NavMeshAgent navAgent)
+	private bool loseTarget;
+
+	public Node_Chase(float minDistanceToChase, float maxDistanceToChase, float chaseTime, VariableGameObject target, NavMeshAgent navAgent, bool loseTarget)
 	{
 		this.minDistanceToChase = minDistanceToChase;
 		this.maxDistanceToChase = maxDistanceToChase;
@@ -31,6 +33,8 @@ public class Node_Chase : BTBaseNode
 
 		this.target = target;
 		this.navAgent = navAgent;
+		this.loseTarget = loseTarget;
+
 		navAgent.stoppingDistance = minDistanceToChase;
 	}
 
@@ -63,7 +67,7 @@ public class Node_Chase : BTBaseNode
 		if(distToTarget >= maxDistanceToChase && chaseTimer <= 0)
 		{
 			Debug.Log(navAgent.name + " Has lost interrest in " + target.name + "(Too far and Chase Time below 0)");
-			target.Value = null;
+			if(loseTarget) target.Value = null;
 			status = TaskStatus.Failed;
 			return status;
 		}
