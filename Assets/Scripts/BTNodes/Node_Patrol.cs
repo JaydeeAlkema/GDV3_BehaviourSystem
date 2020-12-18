@@ -50,7 +50,7 @@ public class Node_Patrol : BTBaseNode
 		}
 
 		Debug.Log(navAgent.name + " Patrolling...");
-		status = TaskStatus.Running;
+		status = TaskStatus.Success;
 		return status;
 	}
 

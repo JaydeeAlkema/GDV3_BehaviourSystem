@@ -68,7 +68,7 @@ public class Guard : MonoBehaviour
 
 		if(Application.isEditor)
 		{
-			//gameObject.AddComponent<ShowNodeTreeStatus>().AddConstructor(transform, tree);
+			gameObject.AddComponent<ShowNodeTreeStatus>().AddConstructor(transform, tree);
 		}
 	}
 
