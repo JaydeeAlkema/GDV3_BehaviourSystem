@@ -36,16 +36,20 @@ public class Node_Chase : BTBaseNode
 
 	public override TaskStatus Run()
 	{
+		chaseTimer -= Time.fixedDeltaTime;
+		if(chaseTimer < 0) chaseTimer = 0;
+
 		// Check if a path is available to the target
 		if(navAgent.pathStatus == NavMeshPathStatus.PathInvalid)
 		{
 			Debug.LogWarning(navAgent.name + " Can't find a path to " + target.name);
+			target.Value = null;
 			status = TaskStatus.Failed;
 			return status;
 		}
 
 		// check if Target is not null. Just in case a different guard killed it or an error occured.
-		if(!target)
+		if(!target.Value)
 		{
 			Debug.Log(navAgent.name + " Lost it's target. (NULL)");
 			status = TaskStatus.Failed;
@@ -55,13 +59,11 @@ public class Node_Chase : BTBaseNode
 		float distToTarget = Vector3.Distance(navAgent.transform.position, target.Value.transform.position);
 		navAgent.SetDestination(target.Value.transform.position);
 
-		// Check if target has went further than the max distance to chase.
-		// If the target has gone above the max distance, start the chase timer. This is done so the agent still keeps it's interrest in the target.
-		// This results in a somewhat more "realistc" behaviour.
-		if(distToTarget >= maxDistanceToChase)
+		// Check if target has went further than the max distance to chase and if the chasetimer is 0.
+		if(distToTarget >= maxDistanceToChase && chaseTimer <= 0)
 		{
 			Debug.Log(navAgent.name + " Has lost interrest in " + target.name + "(Too far and Chase Time below 0)");
-			target = null;
+			target.Value = null;
 			status = TaskStatus.Failed;
 			return status;
 		}
@@ -74,9 +76,11 @@ public class Node_Chase : BTBaseNode
 			status = TaskStatus.Success;
 			return status;
 		}
-
-		Debug.Log(navAgent.name + " Chasing target " + target.name);
-		status = TaskStatus.Running;
-		return status;
+		else
+		{
+			Debug.Log(navAgent.name + " Chasing target " + target.Value.name);
+			status = TaskStatus.Running;
+			return status;
+		}
 	}
 }

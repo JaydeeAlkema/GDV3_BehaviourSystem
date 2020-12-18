@@ -56,7 +56,7 @@ public class Guard : MonoBehaviour
 		Node_Bool node_WeaponAvailable = new Node_Bool(weaponAvailable);
 		Node_MoveToTransform node_MoveToTransform = new Node_MoveToTransform(GameObject.FindGameObjectWithTag("Weapon").transform, agent, 2f); // Again... Not optimal, but it works!
 		Node_AcquireWeapon node_AcquireWeapon = new Node_AcquireWeapon(GameObject.FindGameObjectWithTag("Weapon").transform, agent, 2f, weaponAvailable);
-		Node_Chase node_Chase = new Node_Chase(1, 10, 5f, target, agent);
+		Node_Chase node_Chase = new Node_Chase(1, 5f, 5f, target, agent);
 		Node_Attack node_Attack = new Node_Attack(attackRange.Value, agent, target);
 
 		Sequence sequence_AcquireWeapon = new Sequence(new List<BTBaseNode> { node_MoveToTransform, node_AcquireWeapon }, "Sequence: Acquire Weapon");
