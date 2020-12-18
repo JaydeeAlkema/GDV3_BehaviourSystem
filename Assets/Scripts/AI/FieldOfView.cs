@@ -43,7 +43,7 @@ public class FieldOfView : MonoBehaviour
 				float dstToTarget = Vector3.Distance(transform.position, target.position);
 				if(!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
 				{
-					if(!target.GetComponent<Collider>().isTrigger)
+					if(!visibleTargets.Contains(targetsInViewRadius[i].transform))
 						visibleTargets.Add(target);
 				}
 			}

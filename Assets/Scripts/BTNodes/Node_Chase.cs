@@ -60,14 +60,10 @@ public class Node_Chase : BTBaseNode
 		// This results in a somewhat more "realistc" behaviour.
 		if(distToTarget >= maxDistanceToChase)
 		{
-			chaseTimer -= Time.fixedDeltaTime;
-			if(chaseTimer < 0)
-			{
-				Debug.Log(navAgent.name + " Has lost interrest in " + target.name + "(Too far and Chase Time below 0)");
-				target = null;
-				status = TaskStatus.Failed;
-				return status;
-			}
+			Debug.Log(navAgent.name + " Has lost interrest in " + target.name + "(Too far and Chase Time below 0)");
+			target = null;
+			status = TaskStatus.Failed;
+			return status;
 		}
 
 		// Check if agent is close enough to target.

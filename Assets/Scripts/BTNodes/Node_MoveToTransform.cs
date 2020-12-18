@@ -19,7 +19,7 @@ public class Node_MoveToTransform : BTBaseNode
 	public override TaskStatus Run()
 	{
 		navAgent.SetDestination(targetTransform.position);
-		if(Vector3.Distance(navAgent.transform.position, targetTransform.position) < stoppingDistance)
+		if(Vector3.Distance(navAgent.transform.position, targetTransform.position) <= stoppingDistance)
 		{
 			status = TaskStatus.Success;
 			return status;

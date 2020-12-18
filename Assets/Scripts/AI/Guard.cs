@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Guard : MonoBehaviour
 {
 	[SerializeField] private WaypointsManager waypointsManager;
-	[SerializeField] private BTBaseNode tree;
+	[SerializeField] private Selector tree;
 	[SerializeField] private NavMeshAgent agent;
 	[SerializeField] private Animator animator;
 	[SerializeField] private Transform viewTransform;
@@ -32,12 +32,15 @@ public class Guard : MonoBehaviour
 		fov = GetComponent<FieldOfView>();
 
 		agent.speed = walkSpeed.Value;
-		agent.stoppingDistance = stoppingDistance.Value;
 		StartCoroutine(fov.FindTargetsWithDelay(0.2f));
 	}
 
 	private void Start()
 	{
+
+		target = (VariableGameObject)ScriptableObject.CreateInstance("VariableGameObject");
+		target.Value = GameObject.FindGameObjectWithTag("Player");
+
 		// Patrol Behaviour
 		Node_Patrol node_Patrol = new Node_Patrol(waypointsManager, agent);
 		Node_TargetVisible node_TargetVisible = new Node_TargetVisible(target, fov);
@@ -50,7 +53,7 @@ public class Guard : MonoBehaviour
 		// Chase & Attack Behaviour
 		Node_Bool node_WeaponAvailable = new Node_Bool(weaponAvailable);
 		Node_MoveToTransform node_MoveToTransform = new Node_MoveToTransform(GameObject.FindGameObjectWithTag("Weapon").transform, agent, stoppingDistance.Value); // Again... Not optimal, but it works!
-		Node_AcquireWeapon node_AcquireWeapon = new Node_AcquireWeapon(GameObject.FindGameObjectWithTag("Weapon").transform, agent, 1.15f, weaponAvailable);
+		Node_AcquireWeapon node_AcquireWeapon = new Node_AcquireWeapon(GameObject.FindGameObjectWithTag("Weapon").transform, agent, stoppingDistance.Value, weaponAvailable);
 		Node_Chase node_Chase = new Node_Chase(1, 10, 5f, target, agent);
 		Node_Attack node_Attack = new Node_Attack(attackRange.Value, agent, target);
 
@@ -60,6 +63,11 @@ public class Guard : MonoBehaviour
 
 
 		tree = new Selector(new List<BTBaseNode> { sequence_Chase, sequencePatrol });
+
+		if(Application.isEditor)
+		{
+			gameObject.AddComponent<ShowNodeTreeStatus>().AddConstructor(transform, tree);
+		}
 	}
 
 	private void FixedUpdate()

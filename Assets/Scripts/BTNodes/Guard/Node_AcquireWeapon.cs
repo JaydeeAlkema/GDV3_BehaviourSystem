@@ -20,7 +20,7 @@ public class Node_AcquireWeapon : BTBaseNode
 
 	public override TaskStatus Run()
 	{
-		if(Vector3.Distance(navAgent.transform.position, target.position) < interactionDistance)
+		if(Vector3.Distance(navAgent.transform.position, target.position) <= interactionDistance)
 		{
 			Debug.Log("Weapon Acquired!");
 			weaponAcquired.Value = true;

@@ -213,8 +213,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39897905}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: -6.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.75, z: 6.75}
+  m_LocalScale: {x: 0.31515, y: 1.3999593, z: 0.31515}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 11
@@ -498,9 +498,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c57f348e42646b4091d49d27b0a283d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 55
   waypointsManager: {fileID: 696658740}
   agent: {fileID: 539429223}
   animator: {fileID: 1261249399}
@@ -511,8 +508,7 @@ MonoBehaviour:
   stoppingDistance: {fileID: 11400000, guid: 722d74e7e681ad544bb99468d173721b, type: 2}
   attackRange: {fileID: 11400000, guid: 031d171b9a8ec6e41bd2ff67dc78c857, type: 2}
   viewDistance: {fileID: 11400000, guid: bd36500c7c2113646a09b6272e172f3f, type: 2}
-  target: {fileID: 11400000, guid: c93b2c28ded4f9a45a10f8d535ec5836, type: 2}
-  weapon: {fileID: 11400000, guid: b4f2592775a53ed4b8f8ad930ecb829c, type: 2}
+  target: {fileID: 0}
 --- !u!195 &539429223
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1097,6 +1093,7 @@ GameObject:
   - component: {fileID: 1267729045}
   - component: {fileID: 1267729046}
   - component: {fileID: 1267729049}
+  - component: {fileID: 1267729047}
   - component: {fileID: 1267729048}
   m_Layer: 9
   m_Name: Player
@@ -1137,6 +1134,20 @@ MonoBehaviour:
   moveSpeed: 3
   deathForce: 1500
   ragdoll: {fileID: 1392164572}
+--- !u!136 &1267729047
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267729044}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &1267729048
 Rigidbody:
   m_ObjectHideFlags: 0
