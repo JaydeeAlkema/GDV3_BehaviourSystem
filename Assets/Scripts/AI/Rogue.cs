@@ -26,7 +26,7 @@ public class Rogue : MonoBehaviour
 		// Follow Player
 		Node_IsEnemyActive node_IsEnemyActive = new Node_IsEnemyActive(50, enemyLayermask, transform);
 		Invertor node_IsEnemyActiveInvertor = new Invertor(node_IsEnemyActive);
-		Node_Chase node_Chase = new Node_Chase(2, 10, 10, target, agent, false);
+		Node_Chase node_Chase = new Node_Chase(2, 100, target, agent, false);
 
 		Sequence sequence_FollowPlayer = new Sequence(new List<BTBaseNode> { node_IsEnemyActiveInvertor, node_Chase }, "Ninja Sequence: Follow Player");
 

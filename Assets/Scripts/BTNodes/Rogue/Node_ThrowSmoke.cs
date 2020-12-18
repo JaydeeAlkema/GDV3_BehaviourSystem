@@ -9,7 +9,7 @@ public class Node_ThrowSmoke : BTBaseNode
 	private Transform origin;
 
 	float smokeCooldown;
-	float cooldownTimer;
+	float cooldownTimer = 0;
 
 	public Node_ThrowSmoke(LayerMask enemyLayer, float throwRange, Transform origin, float smokeCooldown)
 	{
@@ -32,7 +32,6 @@ public class Node_ThrowSmoke : BTBaseNode
 				{
 					enemy.GetComponent<Guard>().TriggerSmoke();
 					Debug.Log("Smoked " + enemy.transform.name);
-
 				}
 			}
 

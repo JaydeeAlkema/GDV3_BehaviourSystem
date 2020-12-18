@@ -16,20 +16,15 @@ public class Node_Chase : BTBaseNode
 	/// <summary>
 	/// How long the agent can keep on chasing the target.
 	/// </summary>
-	private float chaseTime;
-	private float chaseTimer;
-
 	private VariableGameObject target;
 	private NavMeshAgent navAgent;
 
 	private bool loseTarget;
 
-	public Node_Chase(float minDistanceToChase, float maxDistanceToChase, float chaseTime, VariableGameObject target, NavMeshAgent navAgent, bool loseTarget)
+	public Node_Chase(float minDistanceToChase, float maxDistanceToChase, VariableGameObject target, NavMeshAgent navAgent, bool loseTarget)
 	{
 		this.minDistanceToChase = minDistanceToChase;
 		this.maxDistanceToChase = maxDistanceToChase;
-		this.chaseTime = chaseTime;
-		chaseTimer = chaseTime;
 
 		this.target = target;
 		this.navAgent = navAgent;
@@ -40,14 +35,11 @@ public class Node_Chase : BTBaseNode
 
 	public override TaskStatus Run()
 	{
-		chaseTimer -= Time.fixedDeltaTime;
-		if(chaseTimer < 0) chaseTimer = 0;
-
 		// Check if a path is available to the target
 		if(navAgent.pathStatus == NavMeshPathStatus.PathInvalid)
 		{
 			Debug.LogWarning(navAgent.name + " Can't find a path to " + target.name);
-			target.Value = null;
+			if(loseTarget) target.Value = null;
 			status = TaskStatus.Failed;
 			return status;
 		}
@@ -56,6 +48,7 @@ public class Node_Chase : BTBaseNode
 		if(!target.Value)
 		{
 			Debug.Log(navAgent.name + " Lost it's target. (NULL)");
+			if(loseTarget) target.Value = null;
 			status = TaskStatus.Failed;
 			return status;
 		}
@@ -64,10 +57,11 @@ public class Node_Chase : BTBaseNode
 		navAgent.SetDestination(target.Value.transform.position);
 
 		// Check if target has went further than the max distance to chase and if the chasetimer is 0.
-		if(distToTarget >= maxDistanceToChase && chaseTimer <= 0)
+		if(distToTarget >= maxDistanceToChase)
 		{
-			Debug.Log(navAgent.name + " Has lost interrest in " + target.name + "(Too far and Chase Time below 0)");
+			Debug.Log(navAgent.name + " Has lost interrest in " + target.name + "(Too far)");
 			if(loseTarget) target.Value = null;
+			navAgent.destination = Vector3.zero;
 			status = TaskStatus.Failed;
 			return status;
 		}

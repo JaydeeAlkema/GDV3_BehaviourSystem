@@ -52,14 +52,19 @@ public class Node_Attack : BTBaseNode
 				}
 			}
 		}
+		if(closestTarget)
+		{
+			// Closest target found.
+			// Continue with expected behaviour.
+			Debug.Log(navAgent.name + " attacked " + closestTarget.name);
+			target.Value = null;
+			closestTarget.GetComponent<IDamageable>().TakeDamage(navAgent.gameObject, 1);
 
-		// Closest target found.
-		// Continue with expected behaviour.
-		Debug.Log(navAgent.name + " attacked " + closestTarget.name);
-		target.Value = null;
-		closestTarget.GetComponent<IDamageable>().TakeDamage(navAgent.gameObject, 1);
+			status = TaskStatus.Success;
+			return status;
+		}
 
-		status = TaskStatus.Success;
+		status = TaskStatus.Running;
 		return status;
 	}
 }
