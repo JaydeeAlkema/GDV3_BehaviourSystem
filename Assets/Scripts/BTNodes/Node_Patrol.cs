@@ -12,55 +12,59 @@ public class Node_Patrol : BTBaseNode
 	WaypointsManager waypointsManager;
 	NavMeshAgent navAgent;
 
-	Transform target;
+	private Transform waypointTarget = null;
 	float minDistanceToTarget = 1.15f;
 	int waypointIndex = 0;
 
-	public Node_Patrol(WaypointsManager waypointsManager, NavMeshAgent navAgent)
+	public Node_Patrol( WaypointsManager waypointsManager, NavMeshAgent navAgent )
 	{
 		this.waypointsManager = waypointsManager;
 		this.navAgent = navAgent;
+		waypointTarget = null;
 	}
 
 	public override TaskStatus Run()
 	{
 		// Get a target to walk towards.
 		// This is not really a "target", but more of a transform to walk to.
-		if(!target)
+		if( waypointTarget == null )
 		{
-			target = waypointsManager.Waypoints[0];
-			navAgent.SetDestination(target.position);
+			waypointTarget = waypointsManager.Waypoints[0];
+			navAgent.SetDestination( waypointTarget.transform.position );
 		}
 
-		float distToTarget = Vector3.Distance(navAgent.transform.position, target.position);
 		// check if a path is available to the target
-		if(navAgent.pathStatus == NavMeshPathStatus.PathInvalid || navAgent.pathStatus == NavMeshPathStatus.PathPartial)
+		//if( navAgent.pathStatus == NavMeshPathStatus.PathInvalid || navAgent.pathStatus == NavMeshPathStatus.PathPartial )
+		//{
+		//	Debug.LogWarning( navAgent.name + " Can't find a path to " + waypointTarget.name );
+		//	status = TaskStatus.Failed;
+		//	return status;
+		//}
+
+		if( waypointTarget != null )
 		{
-			Debug.LogWarning(navAgent.name + " Can't find a path to " + target.name);
-			status = TaskStatus.Failed;
-			return status;
+			Debug.Log( navAgent.name + " Patrolling..." );
+
+			float distToTarget = Vector3.Distance( navAgent.transform.position, waypointTarget.transform.position );
+			if( distToTarget <= minDistanceToTarget )
+			{
+				Debug.Log( navAgent.name + " reached " + waypointTarget.name + ". Walking to new Waypoint!" );
+				waypointTarget = GetNextWaypoint();
+				navAgent.SetDestination( waypointTarget.transform.position );
+			}
+
+			status = TaskStatus.Running;
 		}
 
-		if(distToTarget <= minDistanceToTarget)
-		{
-			Debug.Log(navAgent.name + " reached " + target.name + ". Walking to new Waypoint!");
-
-			target = GetNextWaypoint();
-			navAgent.SetDestination(target.position);
-		}
-
-		Debug.Log(navAgent.name + " Patrolling...");
-		status = TaskStatus.Success;
 		return status;
 	}
-
 	Transform GetNextWaypoint()
 	{
 		waypointIndex++;
 
-		if(waypointIndex >= waypointsManager.Waypoints.Count)
+		if( waypointIndex >= waypointsManager.Waypoints.Count )
 			waypointIndex = 0;
 
-		return waypointsManager.GetWaypoint(waypointIndex);
+		return waypointsManager.GetWaypoint( waypointIndex );
 	}
 }

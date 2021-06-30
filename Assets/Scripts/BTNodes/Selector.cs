@@ -10,21 +10,18 @@ public class Selector : BTBaseNode
 	private List<BTBaseNode> children = new List<BTBaseNode>();
 	public List<BTBaseNode> Children { get => children; set => children = value; }
 
-	public Selector(List<BTBaseNode> children)
+
+	public Selector( List<BTBaseNode> children )
 	{
 		this.children = children;
 	}
 
 	public override TaskStatus Run()
 	{
-		foreach(BTBaseNode node in children)
+		foreach( BTBaseNode node in children )
 		{
-			switch(node.Run())
+			switch( node.Run() )
 			{
-				case TaskStatus.Running:
-					status = TaskStatus.Running;
-					return status;
-
 				case TaskStatus.Success:
 					status = TaskStatus.Success;
 					return status;
@@ -34,7 +31,7 @@ public class Selector : BTBaseNode
 					continue;
 
 				default:
-					break;
+					continue;
 			}
 		}
 

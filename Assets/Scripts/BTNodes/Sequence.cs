@@ -7,43 +7,45 @@ using UnityEngine;
 /// </summary>
 public class Sequence : BTBaseNode
 {
-	private string name;
+	public string Name { get; set; }
 	private List<BTBaseNode> children = new List<BTBaseNode>();
 	public List<BTBaseNode> Children { get => children; set => children = value; }
 
-	public Sequence(List<BTBaseNode> children, string name)
+	public Sequence( List<BTBaseNode> children, string name )
 	{
 		this.children = children;
-		this.name = name;
+		this.Name = name;
 	}
 
 
 	public override TaskStatus Run()
 	{
-		foreach(BTBaseNode node in children)
+		bool childRunning = false;
+
+		foreach( BTBaseNode node in children )
 		{
-			switch(node.Run())
+			switch( node.Run() )
 			{
 				case TaskStatus.Running:
-					Debug.Log(name + " is running!");
-					status = TaskStatus.Running;
-					return status;
+					Debug.Log( Name + " is running!" );
+					childRunning = true;
+					continue;
 
 				case TaskStatus.Success:
+					Debug.Log( Name + " Succeeded!" );
 					continue;
 
 				case TaskStatus.Failed:
-					Debug.Log(name + " Failed!");
+					Debug.Log( Name + " Failed!" );
 					status = TaskStatus.Failed;
 					return status;
 
 				default:
-					break;
+					status = TaskStatus.Success;
+					return status;
 			}
 		}
-
-		Debug.Log(name + " Succeeded!");
-		status = TaskStatus.Success;
+		status = childRunning ? TaskStatus.Running : TaskStatus.Success;
 		return status;
 	}
 }
