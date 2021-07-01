@@ -44,6 +44,7 @@ public class Node_Patrol : BTBaseNode
 		if( waypointTarget != null )
 		{
 			Debug.Log( navAgent.name + " Patrolling..." );
+			navAgent.SetDestination( waypointTarget.transform.position );
 
 			float distToTarget = Vector3.Distance( navAgent.transform.position, waypointTarget.transform.position );
 			if( distToTarget <= minDistanceToTarget )

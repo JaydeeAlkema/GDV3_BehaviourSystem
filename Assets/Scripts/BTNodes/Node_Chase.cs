@@ -65,7 +65,6 @@ public class Node_Chase : BTBaseNode
 				Debug.Log( navAgent.name + " Has lost interrest in " + target.name + "(Too far)" );
 				if( loseTarget ) target.Value = null;
 				navAgent.destination = Vector3.zero;
-				target = null;
 				status = TaskStatus.Failed;
 				return status;
 			}
