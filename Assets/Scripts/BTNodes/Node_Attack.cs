@@ -9,11 +9,11 @@ public class Node_Attack : BTBaseNode
 	private NavMeshAgent navAgent = default;
 	private VariableGameObject target;
 
-	public Node_Attack(float _attackDistance, NavMeshAgent _navAgent, VariableGameObject _target)
+	public Node_Attack(float attackDistance, NavMeshAgent navAgent, VariableGameObject target)
 	{
-		attackDistance = _attackDistance;
-		navAgent = _navAgent;
-		target = _target;
+		this.attackDistance = attackDistance;
+		this.navAgent = navAgent;
+		this.target = target;
 	}
 
 	public override TaskStatus Run()
